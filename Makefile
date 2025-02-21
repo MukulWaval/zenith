@@ -75,17 +75,21 @@ virtualenv:       ## Create a virtual environment.
 	@echo "!!! Please run 'source .venv/bin/activate' to enable the environment !!!"
 
 .PHONY: release
-release:          ## Create a new tag for release.
-	@echo "WARNING: This operation will create s version tag and push to github"
+release:          ## Create a new tag for release and upload to PyPI.
+	@echo "WARNING: This operation will create a version tag, push to GitHub, and upload the package to PyPI"
 	@read -p "Version? (provide the next x.y.z semver) : " TAG
 	@echo "$${TAG}" > zenith/VERSION
 	@$(ENV_PREFIX)gitchangelog > HISTORY.md
 	@git add zenith/VERSION HISTORY.md
 	@git commit -m "release: version $${TAG} 🚀"
-	@echo "creating git tag : $${TAG}"
+	@echo "Creating git tag: $${TAG}"
 	@git tag $${TAG}
 	@git push -u origin HEAD --tags
-	@echo "Github Actions will detect the new tag and release the new version."
+	@echo "Building package..."
+	@python setup.py sdist bdist_wheel
+	@echo "Uploading package to PyPI..."
+	@twine upload dist/*
+	@echo "Release completed! GitHub Actions may also detect the new tag for further processing."
 
 .PHONY: docs
 docs:             ## Build the documentation.
