@@ -30,7 +30,7 @@ def read_requirements(path):
 
 
 setup(
-    name="zenith",
+    name="mukulwaval_zenith",
     version=read("zenith", "VERSION"),
     description="Awesome zenith created by MukulWaval",
     url="https://github.com/MukulWaval/zenith/",
